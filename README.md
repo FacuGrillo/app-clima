@@ -49,7 +49,8 @@ npm start
 ---
 
 ## 📸 Captura de pantalla
-<img width="763" height="504" alt="screenshot" src="https://github.com/user-attachments/assets/8a45f323-25b6-4a13-b1e2-823be1a3640e" />
+<img width="1067" height="462" alt="Captura de pantalla 2026-07-09 161824" src="https://github.com/user-attachments/assets/72efca9d-b81b-40b3-8cbb-dcfa0a1ee5d9" />
+
 
 
 ---
