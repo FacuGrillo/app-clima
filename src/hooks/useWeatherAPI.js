@@ -8,6 +8,12 @@ export const useWeatherAPI = () => {
   const [loading, setLoading] = useState(false);
 
   const getWeather = async (location) => {
+    if (!API_KEY) {
+      setError(
+        "Falta la API key de OpenWeather. Configurá VITE_API_KEY según el README."
+      );
+      return null;
+    }
     const trimmed = (location || "").trim();
 
     if (!trimmed) {

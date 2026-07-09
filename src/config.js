@@ -4,6 +4,7 @@ const envApiKey = import.meta.env.VITE_API_KEY;
 
 // API key: preferir variable de entorno. NO dejar claves hardcodeadas.
 export const API_KEY = envApiKey || "";
+export const HAS_API_KEY = Boolean(envApiKey);
 
 // URLs base de las APIs
 export const WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";

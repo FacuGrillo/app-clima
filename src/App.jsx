@@ -11,6 +11,7 @@ import { useHistory } from "./hooks/useHistory";
 
 import "./styles/App.css";
 import "./styles/dark-theme.css";
+import { API_KEY } from "./config";
 
 function App() {
   const { weather, forecast, error, loading, getWeather } = useWeatherAPI();
@@ -35,6 +36,18 @@ function App() {
 
   return (
     <div className="app-shell" data-theme={theme}>
+      {!API_KEY && (
+        <div className="env-warning" style={{
+          background: '#fff3cd',
+          color: '#856404',
+          padding: '10px',
+          textAlign: 'center',
+          borderBottom: '1px solid #ffeeba'
+        }}>
+          Falta la API key de OpenWeather. Crea un archivo <strong>.env</strong> con
+          <code> VITE_API_KEY=tu_api_key_aqui</code> o lee el README.
+        </div>
+      )}
       <div className="app-card">
         <header className="hero">
           <div className="hero-top">
