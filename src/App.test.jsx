@@ -41,6 +41,7 @@ test('allows adding a city to favorites', async () => {
     cod: 200,
     name: 'Buenos Aires',
     sys: { country: 'AR' },
+    coord: { lat: -34.6037, lon: -58.3816 },
     weather: [{ description: 'cielo claro', icon: '01d' }],
     main: { temp: 18, feels_like: 19, humidity: 60, pressure: 1012 },
     wind: { speed: 3 },
@@ -49,9 +50,9 @@ test('allows adding a city to favorites', async () => {
   const mockForecast = {
     cod: '200',
     list: [
-      { dt_txt: '2026-07-09 12:00:00', main: { temp: 19 }, weather: [{ description: 'cielo claro', icon: '01d' }] },
-      { dt_txt: '2026-07-10 12:00:00', main: { temp: 20 }, weather: [{ description: 'poco nublado', icon: '02d' }] },
-      { dt_txt: '2026-07-11 12:00:00', main: { temp: 21 }, weather: [{ description: 'lluvioso', icon: '10d' }] },
+      { dt: 1688913600, main: { temp: 19, temp_max: 21, temp_min: 18 }, weather: [{ description: 'cielo claro', icon: '01d' }] },
+      { dt: 1689000000, main: { temp: 20, temp_max: 22, temp_min: 19 }, weather: [{ description: 'poco nublado', icon: '02d' }] },
+      { dt: 1689086400, main: { temp: 21, temp_max: 23, temp_min: 20 }, weather: [{ description: 'lluvioso', icon: '10d' }] },
     ],
   };
 
@@ -78,7 +79,9 @@ test('allows adding a city to favorites', async () => {
     await userEvent.click(await screen.findByRole('button', { name: /agregar a favoritos/i }));
   });
 
-  expect(await screen.findByRole('button', { name: /buenos aires, ar/i })).toBeInTheDocument();
+  const favoriteButtons = screen.getAllByRole('button', { name: /^Buenos Aires$/i });
+  expect(favoriteButtons.length).toBeGreaterThan(0);
+  expect(favoriteButtons[0].closest('.chip')).not.toBeNull();
 });
 
 test('shows a forecast section after a successful search', async () => {
@@ -86,6 +89,7 @@ test('shows a forecast section after a successful search', async () => {
     cod: 200,
     name: 'Buenos Aires',
     sys: { country: 'AR' },
+    coord: { lat: -34.6037, lon: -58.3816 },
     weather: [{ description: 'cielo claro', icon: '01d' }],
     main: { temp: 18, feels_like: 19, humidity: 60, pressure: 1012 },
     wind: { speed: 3 },
@@ -94,9 +98,9 @@ test('shows a forecast section after a successful search', async () => {
   const mockForecast = {
     cod: '200',
     list: [
-      { dt_txt: '2026-07-09 12:00:00', main: { temp: 19 }, weather: [{ description: 'cielo claro', icon: '01d' }] },
-      { dt_txt: '2026-07-10 12:00:00', main: { temp: 20 }, weather: [{ description: 'poco nublado', icon: '02d' }] },
-      { dt_txt: '2026-07-11 12:00:00', main: { temp: 21 }, weather: [{ description: 'lluvioso', icon: '10d' }] },
+      { dt: 1688913600, main: { temp: 19, temp_max: 21, temp_min: 18 }, weather: [{ description: 'cielo claro', icon: '01d' }] },
+      { dt: 1689000000, main: { temp: 20, temp_max: 22, temp_min: 19 }, weather: [{ description: 'poco nublado', icon: '02d' }] },
+      { dt: 1689086400, main: { temp: 21, temp_max: 23, temp_min: 20 }, weather: [{ description: 'lluvioso', icon: '10d' }] },
     ],
   };
 
