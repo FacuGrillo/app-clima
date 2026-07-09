@@ -12,20 +12,32 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const getWeather = async (location) => {
+    const normalizedLocation =
+      typeof location === "string" ? location.trim() : location;
+
+    if (typeof normalizedLocation === "string" && normalizedLocation.length === 0) {
+      setWeather(null);
+      setError("Ingresa una ciudad para buscar.");
+      return;
+    }
+
     try {
       setError(null);
       setLoading(true);
 
       let url;
-      if (typeof location === "string") {
-        // búsqueda por nombre (Enter o botón)
-        url = `${WEATHER_URL}?q=${location}&appid=${API_KEY}&units=metric&lang=es`;
+      if (typeof normalizedLocation === "string") {
+        url = `${WEATHER_URL}?q=${encodeURIComponent(normalizedLocation)}&appid=${API_KEY}&units=metric&lang=es`;
       } else {
-        // búsqueda por coordenadas (cuando seleccionás de la lista)
-        url = `${WEATHER_URL}?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=metric&lang=es`;
+        url = `${WEATHER_URL}?lat=${normalizedLocation.lat}&lon=${normalizedLocation.lon}&appid=${API_KEY}&units=metric&lang=es`;
       }
 
       const res = await fetch(url);
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
       const data = await res.json();
 
       if (data.cod === 200) {
@@ -34,13 +46,13 @@ function App() {
         setWeather(null);
         setError(
           `No se encontró la ciudad "${
-            typeof location === "string" ? location : ""
+            typeof normalizedLocation === "string" ? normalizedLocation : ""
           }". Verifica el nombre o intenta otra vez.`
         );
       }
     } catch (err) {
       setWeather(null);
-      setError("Error al conectar con la API.");
+      setError("Error al conectar con la API o no se pudo completar la búsqueda.");
     } finally {
       setLoading(false);
     }
