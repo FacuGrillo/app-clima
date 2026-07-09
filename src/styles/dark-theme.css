@@ -1,10 +1,40 @@
 :root {
   color-scheme: dark;
+  --bg-color: linear-gradient(135deg, #07111f 0%, #0f172a 100%);
+  --surface-color: rgba(12, 16, 24, 0.95);
+  --surface-strong: rgba(17, 24, 39, 0.95);
+  --border-color: rgba(30, 144, 255, 0.25);
+  --text-color: #d1d5db;
+  --muted-color: #9ca3af;
+  --accent-color: #72b7ff;
+  --accent-strong: #4ea8ff;
+  --chip-bg: rgba(30, 144, 255, 0.18);
+  --hover-bg: rgba(30, 144, 255, 0.25);
+  --input-bg: #111827;
+  --panel-bg: rgba(255, 255, 255, 0.03);
+  --title-color: #f3f4f6;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg-color: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  --surface-color: #ffffff;
+  --surface-strong: #f8fafc;
+  --border-color: #bfdbfe;
+  --text-color: #0c2340;
+  --muted-color: #334155;
+  --accent-color: #1e40af;
+  --accent-strong: #1e3a8a;
+  --chip-bg: #dbeafe;
+  --hover-bg: #bfdbfe;
+  --input-bg: #f8fafc;
+  --panel-bg: #f0f9ff;
+  --title-color: #0c2340;
 }
 
 body {
-  background: linear-gradient(135deg, #07111f 0%, #0f172a 100%);
-  color: #f8fbff;
+  background: var(--bg-color);
+  color: var(--text-color);
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;

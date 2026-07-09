@@ -30,6 +30,7 @@ function App() {
   const [forecast, setForecast] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [history, setHistory] = useState([]);
+  const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
     const storage = getStorage();
@@ -41,8 +42,10 @@ function App() {
     try {
       const savedFavorites = JSON.parse(storage.getItem(FAVORITES_KEY) || "[]");
       const savedHistory = JSON.parse(storage.getItem(HISTORY_KEY) || "[]");
+      const savedTheme = storage.getItem("clima-theme") || "dark";
       setFavorites(Array.isArray(savedFavorites) ? savedFavorites : []);
       setHistory(Array.isArray(savedHistory) ? savedHistory : []);
+      setTheme(savedTheme === "light" ? "light" : "dark");
     } catch {
       setFavorites([]);
       setHistory([]);
@@ -68,6 +71,17 @@ function App() {
 
     storage.setItem(HISTORY_KEY, JSON.stringify(history));
   }, [history]);
+
+  useEffect(() => {
+    const storage = getStorage();
+
+    if (!storage) {
+      return;
+    }
+
+    storage.setItem("clima-theme", theme);
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   const isFavorite = useMemo(() => {
     if (!weather) {
@@ -183,11 +197,22 @@ function App() {
   };
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" data-theme={theme}>
       <div className="app-card">
         <header className="hero">
-          <p className="eyebrow">Pronóstico en tiempo real</p>
-          <h1>App de Clima</h1>
+          <div className="hero-top">
+            <div>
+              <p className="eyebrow">Pronóstico en tiempo real</p>
+              <h1>App de Clima</h1>
+            </div>
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
+            >
+              {theme === "dark" ? "🌙 Oscuro" : "☀️ Claro"}
+            </button>
+          </div>
           <p className="hero-copy">
             Busca ciudades, guarda tus favoritas y consulta el clima actual con más detalles.
           </p>

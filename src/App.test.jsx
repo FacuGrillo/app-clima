@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import App from './App';
@@ -16,10 +16,22 @@ test('renders the weather app heading', () => {
   expect(screen.getByRole('heading', { name: /app de clima/i })).toBeInTheDocument();
 });
 
+test('toggles between dark and light theme', async () => {
+  render(<App />);
+
+  await act(async () => {
+    await userEvent.click(screen.getByRole('button', { name: /oscuro/i }));
+  });
+
+  expect(screen.getByRole('button', { name: /claro/i })).toBeInTheDocument();
+});
+
 test('shows an error when the search is empty', async () => {
   render(<App />);
 
-  await userEvent.click(screen.getByRole('button', { name: /buscar/i }));
+  await act(async () => {
+    await userEvent.click(screen.getByRole('button', { name: /buscar/i }));
+  });
 
   expect(await screen.findByText(/ingresa una ciudad/i)).toBeInTheDocument();
 });
@@ -57,9 +69,14 @@ test('allows adding a city to favorites', async () => {
 
   render(<App />);
 
-  await userEvent.type(screen.getByPlaceholderText(/ingresa ciudad/i), 'Buenos Aires');
-  await userEvent.click(screen.getByRole('button', { name: /buscar/i }));
-  await userEvent.click(await screen.findByRole('button', { name: /agregar a favoritos/i }));
+  await act(async () => {
+    await userEvent.type(screen.getByPlaceholderText(/ingresa ciudad/i), 'Buenos Aires');
+    await userEvent.click(screen.getByRole('button', { name: /buscar/i }));
+  });
+
+  await act(async () => {
+    await userEvent.click(await screen.findByRole('button', { name: /agregar a favoritos/i }));
+  });
 
   expect(await screen.findByRole('button', { name: /buenos aires, ar/i })).toBeInTheDocument();
 });
@@ -97,8 +114,10 @@ test('shows a forecast section after a successful search', async () => {
 
   render(<App />);
 
-  await userEvent.type(screen.getByPlaceholderText(/ingresa ciudad/i), 'Buenos Aires');
-  await userEvent.click(screen.getByRole('button', { name: /buscar/i }));
+  await act(async () => {
+    await userEvent.type(screen.getByPlaceholderText(/ingresa ciudad/i), 'Buenos Aires');
+    await userEvent.click(screen.getByRole('button', { name: /buscar/i }));
+  });
 
   expect(await screen.findByText(/pronóstico de los próximos días/i)).toBeInTheDocument();
 });
